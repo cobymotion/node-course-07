@@ -1,12 +1,43 @@
-const http = require('http');
+const express=require('express'); 
+const hbs = require('hbs');
 
-const server = http.createServer((req, res) => {
+const app = express();
+const port = 8080; 
 
-    res.write('Hola mundo');
+// motor para las vistas
+app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname+'/views/partials', (error) => {});
 
-    res.end();
+// servir contenido estatico 
+app.use( express.static('public'));
+
+app.get('/', (req,res) => {
+    res.render('home', {
+        nombre:'Luis Cobian',
+        course:'Curso de node' 
+    });
 });
 
-server.listen(8080);
+app.get('/elements', (req,res) => {
+    res.render('elements', {
+        nombre:'Luis Cobian',
+        course:'Curso de node' 
+    });
+});
 
-console.log("Escuchando el puerto ", 8080);
+app.get('/generics', (req,res) => {
+    res.render('generics', {
+        nombre:'Luis Cobian',
+        course:'Curso de node' 
+    });
+});
+
+
+app.get('*', (req,res) => {
+    res.sendFile(__dirname + '/public/404.html');
+});
+
+
+app.listen(port, ()=>{
+    console.log(`Example app listening at http://localhost:${port}`);
+});
